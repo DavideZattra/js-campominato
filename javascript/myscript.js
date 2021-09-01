@@ -48,8 +48,10 @@ console.log(bombNumbers.length)
 let userNumbers = [];
 let gameScore = 0;
 let userAskedNumber = 0;
+let lengthOfBombArray = bombNumbers.length;
+let lengthOfUserAskedNumbersArray = userNumbers.length;
 
-while (userNumbers.length < (20 - bombNumbers.length)){
+while (lengthOfUserAskedNumbersArray < (100 - lengthOfBombArray)){
     // userAskedNumber = parseInt(prompt('Inserisci un numero!'));
     userAskedNumber = getRandomNumber(1, 100);
 
@@ -78,18 +80,24 @@ while (userNumbers.length < (20 - bombNumbers.length)){
     // }
 
     if (isNaN(userAskedNumber)){
-        alert('inserisci un numero valido!');
+        console.log('inserisci un numero valido!');
     } else if (userNumbers.includes(userAskedNumber)){
-        alert('non devi ripetere il numero!');
+        console.log('non devi ripetere il numero!');
     } else if (bombNumbers.includes(userAskedNumber)){
         console.log('KABOOM! HAI PERSO');
         console.log('Il tuo punteggio è di ' + gameScore + 'punti');
+        lengthOfUserAskedNumbersArray = 1000;
     } else if (userAskedNumber < 1 || userAskedNumber > 100){
-        alert('inserisci un numero tra 1 e 100 inclusi!');
+        console.log('inserisci un numero tra 1 e 100 inclusi!');
     } else {
         userNumbers.push(userAskedNumber);
+        lengthOfUserAskedNumbersArray++;
         gameScore++;
     }
+}
+
+if (userNumbers.length === 100 - bombNumbers.length){
+    console.log('Hai Vinto')
 }
 
 console.log(userNumbers.length);
