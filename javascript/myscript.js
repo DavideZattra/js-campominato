@@ -28,80 +28,88 @@ l’utente ha inserito un numero consentito.
 // a. Stampiamo il messaggio di alert del gioco (se hai vinto o perso)
 // b. Stampiamo il punteggio del giocatore 
 
-//  1 - Creiamo un bell'array all'interno del quale inserire (poi) le bombe 
-let bombNumbers = [];
-
-//  2 - Genero un numero randomico e lo inserisco all'interno dell'array di cui sopra ^, FINCHE' non arrivo a 16
-function getRandomNumber(min, max) {
+//FUNZIONI
+function getRandomNumber(min, max) { //crea un numero randomico tra un intervallo
     return Math.floor(Math.random() * (max - min) + min);
 }
 
+function isBetweenIntegers(variable, min, max){ //controlla che una variabile sia nell'intervallo stabilito
 
-for (i = 0; i < 16; i++){
+    if (variable < min || variable > max){
+        return false;
+    }
+
+    return true;
+} 
+
+//  1 - Creiamo un bell'array all'interno del quale inserire (poi) le bombe 
+let bombList = [];
+
+
+// inserisco un prompt per scegliere la difficoltà
+let difficultyLevel = parseInt(prompt('inserisci un livello di difficoltà tra 1 e 5 in cui 1 è facilissimo e 5 impossibile'))
+while (!isBetweenIntegers(difficultyLevel, 1, 5)){
+    difficultyLevel = parseInt(prompt('inserisci un livello di difficoltà tra 1 e 5 in cui 1 è facilissimo e 5 impossibile'))
+}
+console.log(difficultyLevel)
+
+let lenghtOfBombList= Math.floor(difficultyLevel * 7.5);
+
+//  2 - Genero un numero randomico e lo inserisco all'interno dell'array di cui sopra ^, FINCHE' non arrivo a 16
+for (i = 0; i < lenghtOfBombList; i++){
     let createdBomb = getRandomNumber(1, 100);
-    bombNumbers.push(createdBomb);
+    bombList.push(createdBomb);
 }
 
-console.log(bombNumbers.length)
+console.log(bombList.length)
+console.log(bombList)
 
 //  3 - Crea un array per ricordare i numeri (scelti) dall'utente
 let userNumbers = [];
 let gameScore = 0;
 let userAskedNumber = 0;
-let lengthOfBombArray = bombNumbers.length;
+let lengthOfBombArray = bombList.length;
 let lengthOfUserAskedNumbersArray = userNumbers.length;
 
 while (lengthOfUserAskedNumbersArray < (100 - lengthOfBombArray)){
-    // userAskedNumber = parseInt(prompt('Inserisci un numero!'));
-    userAskedNumber = getRandomNumber(1, 100);
-
-    // switch(userAskedNumber){
-
-    //     case isNaN(userAskedNumbers):
-    //         alert('inserisci un numero valido!');
-    //         break;
-
-    //     case userNumbers.includes(userAskedNumber):
-    //         alert('non devi ripetere il numero!');
-    //         break;
-
-    //     case bombNumbers.includes(userAskedNumber):
-    //         alert('KABOOM! HAI PERSO');
-    //         alert('Il tuo punteggio è di ' + gamescore + 'punti');
-    //         break;
-
-    //     case userAskedNumber < 1 || userAskedNumber > 100:
-    //         alert('inserisci un numero tra 1 e 100 inclusi!');
-    //         break;
-        
-    //     default:
-    //         userNumbers.push(userAskedNumber);
-    //         gameScore++;
-    // }
+    userAskedNumber = parseInt(prompt('Inserisci un numero!')); //!!! da utilizzare come standard per il gioco
+    // userAskedNumber = getRandomNumber(1, 100); // !!! da usare in caso di test
 
     if (isNaN(userAskedNumber)){
+
         console.log('inserisci un numero valido!');
-    } else if (userNumbers.includes(userAskedNumber)){
+
+    } else if (userNumbers.includes(userAskedNumber)){ // 3) Controllo se per caso lo aveva già scelto (è già presente nell'array dei numeri scelti dall'utente)
+
         console.log('non devi ripetere il numero!');
-    } else if (bombNumbers.includes(userAskedNumber)){
+
+    } else if (bombList.includes(userAskedNumber)){ // 2) Controllare che il numero non sia presente nell'array di bombe !!! ALTRIMENTI KABOOM
+
         console.log('KABOOM! HAI PERSO');
         console.log('Il tuo punteggio è di ' + gameScore + 'punti');
-        lengthOfUserAskedNumbersArray = 1000;
-    } else if (userAskedNumber < 1 || userAskedNumber > 100){
+        lengthOfUserAskedNumbersArray = 100 - lengthOfBombArray;
+
+    } else if (!isBetweenIntegers(userAskedNumber, 1, 100)){ // 2) Controllare che il numero sia compreso tra il minimo e il massimo (1, 100)
+
         console.log('inserisci un numero tra 1 e 100 inclusi!');
-    } else {
+
+    } else { //4) Se il numero non è esplosivo e non è stato scelto, lo aggiungo nell'array dei numeri scelti
+
         userNumbers.push(userAskedNumber);
         lengthOfUserAskedNumbersArray++;
         gameScore++;
+
     }
+
 }
 
-if (userNumbers.length === 100 - bombNumbers.length){
-    console.log('Hai Vinto')
+if (userNumbers.length === 100 - bombList.length){ //a. Stampiamo il messaggio di alert del gioco (se hai vinto o perso)
+    alert('Hai Vinto, il tuo punteggio è di ' + gameScore);
+    
 }
 
 console.log(userNumbers.length);
 console.log(userNumbers);
-console.log(bombNumbers);
+console.log(bombList);
 console.log(gameScore);
 
